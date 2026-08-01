@@ -118,14 +118,14 @@ const FORM_READY = Boolean(
         files = files.filter(f => !bad.includes(f));
       }
       if (files.length > MAX_FILES) {
-        problem = 'Up to ' + MAX_FILES + ' photos. The extras were left off — text the rest to 571-664-6166.';
+        problem = 'Up to ' + MAX_FILES + ' photos. The extras were left off — text the rest to 612-465-9587.';
         files = files.slice(0, MAX_FILES);
       }
       let total = files.reduce((n, f) => n + f.size, 0);
       while (files.length && total > MAX_TOTAL) {
         files.pop();
         total = files.reduce((n, f) => n + f.size, 0);
-        problem = 'That is over 15 MB, so the last photo was left off. Text the rest to 571-664-6166.';
+        problem = 'That is over 15 MB, so the last photo was left off. Text the rest to 612-465-9587.';
       }
 
       const dt = new DataTransfer();
@@ -204,9 +204,9 @@ const FORM_READY = Boolean(
           form.reset();
           if (fileInput) { fileInput.value = ''; renderFiles(); }
           say('Got it — thank you' + (photos.length ? ', photos and all' : '') +
-              '. We will call you back shortly. Need it gone right now? Call 571-664-6166 any time, day or night.', 'ok');
+              '. We will call you back shortly. Need it gone right now? Call 612-465-9587 any time, day or night.', 'ok');
         } catch (err) {
-          say('That did not go through (' + err.message + '). Please call or text 571-664-6166 and we will take care of it.', 'err');
+          say('That did not go through (' + err.message + '). Please call or text 612-465-9587 and we will take care of it.', 'err');
         } finally {
           if (btn) { btn.disabled = false; btn.textContent = original; }
         }
@@ -225,9 +225,9 @@ const FORM_READY = Boolean(
         ? 'Opening your email app with the details filled in. Your ' +
           (photos.length === 1 ? 'photo' : photos.length + ' photos') +
           ' could not be attached automatically — add them to that email before you send it, ' +
-          'or just text them to 571-664-6166, which is faster.'
+          'or just text them to 612-465-9587, which is faster.'
         : 'Opening your email app with the details filled in — just press send. If nothing opened, email ' +
-          BUSINESS_EMAIL + ' or call 571-664-6166 and we will take care of it.', 'ok');
+          BUSINESS_EMAIL + ' or call 612-465-9587 and we will take care of it.', 'ok');
     });
   });
 })();
@@ -254,8 +254,8 @@ const FORM_READY = Boolean(
       if (!current) { caption.innerHTML = DEFAULT; return; }
       const name = buttons.find(b => b.dataset.city === current).textContent.trim();
       caption.innerHTML = 'Yes &mdash; we cover <b>' + name + '</b>. Same-day and 24/7 pickups, ' +
-        'free estimate before we start. Call <a href="tel:+15716646166" ' +
-        'style="color:var(--blue-600);font-weight:600;">571-664-6166</a>.';
+        'free estimate before we start. Call <a href="tel:+16124659587" ' +
+        'style="color:var(--blue-600);font-weight:600;">612-465-9587</a>.';
     };
 
     buttons.forEach(b => b.addEventListener('click', () => select(b.dataset.city)));
