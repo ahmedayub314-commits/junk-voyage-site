@@ -158,8 +158,18 @@ const FORM_READY = Boolean(
 
       const data = Object.fromEntries(new FormData(form).entries());
 
+      // The booking form collects an address and a time window, so it gets its own
+      // subject line — a booking needs acting on faster than a price question.
+      const isBooking = form.hasAttribute('data-booking');
+
       if (!data.name || !data.phone) {
         say('Please add your name and a phone number so we can reach you.', 'err');
+        return;
+      }
+      // A booking with no address is not a booking.
+      if (isBooking && !data.address) {
+        say('We need the pickup address to book a time. Add the street address and try again.', 'err');
+        form.querySelector('[name=address]').focus();
         return;
       }
       // Honeypot — bots fill hidden fields, people do not.
@@ -167,20 +177,39 @@ const FORM_READY = Boolean(
 
       const photos = fileInput ? [...fileInput.files] : [];
 
-      const lines = [
+      const where = [data.address, data.city, data.zip].filter(Boolean).join(', ');
+
+      const lines = (isBooking ? [
+        '*** BOOKING REQUEST ***',
+        '',
         'Name: ' + data.name,
         'Phone: ' + data.phone,
         'Email: ' + (data.email || '—'),
-        'Address / City: ' + (data.address || '—'),
-        'Service needed: ' + (data.service || '—'),
+        '',
+        'Address: ' + (where || '—'),
+        'Access notes: ' + (data.access || '—'),
+        '',
         'When: ' + (data.when || '—'),
+        'Preferred date: ' + (data.date || 'not specified'),
+        'Time window: ' + (data.window || '—'),
+        '',
+        'Service: ' + (data.service || '—'),
+        'Rough size: ' + (data.size || '—')
+      ] : [
+        'Name: ' + data.name,
+        'Phone: ' + data.phone,
+        'Email: ' + (data.email || '—'),
+        'Address / City: ' + (where || '—'),
+        'Service needed: ' + (data.service || '—'),
+        'When: ' + (data.when || '—')
+      ]).concat([
         'Photos: ' + (photos.length
           ? photos.length + ' (' + photos.map(f => f.name).join(', ') + ') — please attach before sending'
           : 'none'),
         '',
         'Details:',
         data.details || '—'
-      ].join('\n');
+      ]).join('\n');
 
       if (FORM_READY) {
         const original = btn ? btn.textContent : '';
@@ -192,7 +221,8 @@ const FORM_READY = Boolean(
           if (!photos.length) payload.delete('photos');
           payload.delete('company');                    // honeypot, no need to send it
           if (FORM_ACCESS_KEY) payload.append('access_key', FORM_ACCESS_KEY);
-          payload.append('subject', 'Junk Voyage — free estimate request from ' + data.name);
+          payload.append('subject', (isBooking ? 'BOOKING REQUEST — ' : 'Free estimate request — ') + data.name
+            + (isBooking && data.when ? ' (' + data.when + ')' : ''));
           // So hitting Reply in the inbox goes straight back to the customer.
           if (data.email) payload.append('replyto', data.email);
           const res = await fetch(FORM_ENDPOINT, {
@@ -203,7 +233,9 @@ const FORM_READY = Boolean(
           if (!res.ok) throw new Error('Request failed: ' + res.status);
           form.reset();
           if (fileInput) { fileInput.value = ''; renderFiles(); }
-          say('Got it — thank you' + (photos.length ? ', photos and all' : '') +
+          say(isBooking
+            ? 'Booking request received — thank you. We will confirm your time by text or call, usually within the hour. Need it sooner? Call 612-465-9587 any time, day or night.'
+            : 'Got it — thank you' + (photos.length ? ', photos and all' : '') +
               '. We will call you back shortly. Need it gone right now? Call 612-465-9587 any time, day or night.', 'ok');
         } catch (err) {
           say('That did not go through (' + err.message + '). Please call or text 612-465-9587 and we will take care of it.', 'err');
@@ -214,7 +246,7 @@ const FORM_READY = Boolean(
       }
 
       // No endpoint configured — hand off to the visitor's email app.
-      const subject = 'Free estimate request — ' + data.name;
+      const subject = (isBooking ? 'Booking request — ' : 'Free estimate request — ') + data.name;
       window.location.href =
         'mailto:' + BUSINESS_EMAIL +
         '?subject=' + encodeURIComponent(subject) +
