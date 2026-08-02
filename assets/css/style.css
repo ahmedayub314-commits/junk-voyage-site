@@ -395,20 +395,51 @@ p:last-child{margin-bottom:0;}
 .choice input:focus-visible + span{outline:2px solid var(--blue-600);outline-offset:2px;}
 
 /* ---------- Booking page ---------- */
-.book-grid{display:grid;grid-template-columns:1fr .82fr;gap:clamp(1.5rem,1rem+2.5vw,3rem);align-items:start;}
-.book-card{
-  background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);
-  padding:clamp(1.4rem,1rem+1.2vw,2.1rem);box-shadow:var(--shadow-lg);
+.book-grid{
+  display:grid;grid-template-columns:1fr .74fr;
+  gap:clamp(1.75rem, 1rem + 3.2vw, 4.25rem);align-items:start;
 }
+.book-steps{display:grid;gap:1.15rem;}
+
+/* Each step is its own card, so the form reads as four short asks
+   rather than one long wall of inputs. */
+.book-step{
+  margin:0;min-width:0;                       /* fieldset resets, must come first */
+  background:#fff;border:1px solid var(--line);border-radius:var(--r-md);
+  padding:clamp(1.35rem,1.1rem + .7vw,1.75rem);box-shadow:var(--shadow-sm);
+}
+.book-step-head{display:flex;align-items:flex-start;gap:.85rem;margin-bottom:1.3rem;}
+.book-step-head .n{
+  width:32px;height:32px;border-radius:50%;background:var(--blue-600);color:#fff;
+  display:flex;align-items:center;justify-content:center;flex:none;
+  font-family:var(--display);font-weight:800;font-size:.92rem;
+  box-shadow:0 6px 14px -8px rgba(23,88,200,.9);
+}
+.book-step-head h2{
+  font-size:1.1rem;margin:0;letter-spacing:-.015em;line-height:1.3;
+}
+.book-step-head p{font-size:.875rem;color:var(--ink-soft);margin:.12rem 0 0;line-height:1.45;}
+
+/* The final action sits directly on the section, not in another box —
+   four cards plus a fifth container reads as clutter. */
+.book-submit{padding:.35rem .15rem 0;}
+.book-submit .form-fine{margin-top:.95rem;}
+.book-submit .form-fine a{color:var(--blue-600);font-weight:600;}
+
 .book-side{display:grid;gap:1rem;position:sticky;top:calc(var(--header-h) + 1.25rem);}
-.fieldset{border:0;padding:0;margin:0 0 1.35rem;}
-.fieldset legend{
-  padding:0;margin-bottom:.7rem;font-family:var(--display);font-weight:800;
-  font-size:1.02rem;color:var(--navy-800);letter-spacing:-.015em;
+.book-side .panel{padding:1.4rem 1.5rem;}
+.book-side .panel h3{font-size:1.08rem;margin-bottom:.15rem;}
+
+/* standalone label above a choice group */
+.field-legend{
+  font-family:var(--display);font-weight:700;font-size:.72rem;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--navy-700);margin:0 0 .5rem;
 }
-.fieldset legend em{
-  font-style:normal;font-family:var(--sans);font-weight:500;font-size:.85rem;
-  color:var(--ink-soft);margin-left:.4rem;letter-spacing:0;
+
+/* sub-label inside a field label, e.g. "(optional)" */
+.opt{
+  text-transform:none;letter-spacing:0;font-weight:500;
+  color:var(--ink-soft);font-family:var(--sans);
 }
 
 /* ---------- Demolition: what we do / don't ---------- */
