@@ -625,27 +625,39 @@ p:last-child{margin-bottom:0;}
 
 /* ---------- Service-area map ---------- */
 .svc-map-wrap{
-  display:grid;grid-template-columns:.85fr 1.15fr;
-  gap:clamp(1.5rem,1rem + 2vw,2.75rem);align-items:start;margin-top:1.75rem;
+  display:grid;grid-template-columns:1.12fr .88fr;
+  gap:clamp(1.5rem, 1rem + 2vw, 2.75rem);align-items:start;margin-top:1.75rem;
 }
 .svc-map{
-  background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);
-  padding:1.1rem;box-shadow:var(--shadow-sm);
+  background:linear-gradient(180deg,#FBFDFF,var(--sky-50));
+  border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:1.35rem 1.25rem;box-shadow:var(--shadow-sm);
 }
 .svc-map svg{width:100%;height:auto;display:block;overflow:visible;}
+/* coverage footprint — the thing that turns scattered dots into a service area */
+.map-area{stroke:var(--sky-500);stroke-width:2;stroke-dasharray:7 6;stroke-opacity:.55;}
+.map-core{stroke:var(--blue-600);stroke-width:1.5;stroke-opacity:.28;}
 .map-river{
-  fill:none;stroke:#C9E2F7;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;
+  fill:none;stroke:#BBDCF5;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;
+  opacity:.9;
+}
+.map-compass{fill:var(--ink-soft);opacity:.6;}
+.map-compass-ring{fill:none;stroke:var(--line);stroke-width:1.5;}
+.map-compass text{
+  font-family:var(--display);font-weight:700;font-size:14px;fill:var(--ink-soft);
 }
 .map-pin{cursor:pointer;}
 .map-pin:focus{outline:none;}
 .map-halo{fill:var(--blue-600);opacity:0;transition:opacity .16s ease;}
+.map-pin.is-core .map-halo{fill:var(--blue-600);}
 .map-dot{
-  fill:#fff;stroke:var(--sky-500);stroke-width:2.4;
-  transition:fill .16s ease,stroke .16s ease;
+  fill:#fff;stroke:var(--sky-500);stroke-width:2.6;
+  transition:fill .16s ease,stroke .16s ease,r .16s ease;
+  filter:drop-shadow(0 1px 2px rgba(10,34,64,.18));
 }
 .map-pin.is-core .map-dot{fill:var(--sky-500);stroke:var(--navy-800);stroke-width:2.6;}
 .map-label{
-  font-family:var(--display);font-weight:700;font-size:13px;fill:var(--navy-800);
+  font-family:var(--display);font-weight:700;font-size:14px;fill:var(--navy-800);
   opacity:0;transition:opacity .16s ease;pointer-events:none;paint-order:stroke;
   stroke:#fff;stroke-width:3.5px;stroke-linejoin:round;
 }
