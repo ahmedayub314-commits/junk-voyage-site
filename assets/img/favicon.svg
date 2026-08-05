@@ -4,8 +4,8 @@
        bookmarks and app icons use this. Same shapes, same palette. -->
   <defs>
     <linearGradient id="jvFav" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#16559A"/>
-      <stop offset="1" stop-color="#08203D"/>
+      <stop offset="0" stop-color="#2A5638"/>
+      <stop offset="1" stop-color="#0E2A19"/>
     </linearGradient>
     <clipPath id="jvFavClip"><rect width="96" height="96" rx="20"/></clipPath>
   </defs>
@@ -13,20 +13,20 @@
   <g clip-path="url(#jvFavClip)">
 
     <g transform="translate(48 44) scale(1.55) translate(-66 -43)">
-      <g fill="#7FC6F2">
+      <g fill="#F6C89B">
         <path d="M50 42v-8.4a2 2 0 0 1 2-2h2.9a2 2 0 0 1 2 2v3.6h2.3a2 2 0 0 1 2 2V42Z"/>
         <rect x="63.5" y="27" width="12.5" height="15" rx="2"/>
         <path d="m77.8 42 1.7-7.9a1.9 1.9 0 0 1 2.2-1.5l1.4.3a1.9 1.9 0 0 1 1.5 2.2L83.2 42Z"/>
       </g>
       <rect x="48" y="42" width="36" height="15" rx="2.2" fill="#FFFFFF"/>
-      <rect x="51" y="45.4" width="30" height="2.2" rx="1.1" fill="#C9E2F7"/>
+      <rect x="51" y="45.4" width="30" height="2.2" rx="1.1" fill="#F3DCC2"/>
       <circle cx="57" cy="57.5" r="4.4" fill="#FFFFFF"/>
       <circle cx="74" cy="57.5" r="4.4" fill="#FFFFFF"/>
-      <circle cx="57" cy="57.5" r="1.9" fill="#0B2A50"/>
-      <circle cx="74" cy="57.5" r="1.9" fill="#0B2A50"/>
+      <circle cx="57" cy="57.5" r="1.9" fill="#0E2A19"/>
+      <circle cx="74" cy="57.5" r="1.9" fill="#0E2A19"/>
     </g>
 
-    <path d="M-6 72q14-5 28 0t28 0 28 0 28 0V102H-6Z" fill="#1E6FB5"/>
-    <path d="M-6 81q14-5 28 0t28 0 28 0 28 0V102H-6Z" fill="#2E96E0"/>
+    <path d="M-6 72q14-5 28 0t28 0 28 0 28 0V102H-6Z" fill="#C25E0D"/>
+    <path d="M-6 81q14-5 28 0t28 0 28 0 28 0V102H-6Z" fill="#F5872B"/>
   </g>
 </svg>
