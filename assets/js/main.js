@@ -18,6 +18,28 @@
 const FORM_ACCESS_KEY = 'a3f81615-6387-4099-ad99-27c9c4668053';
 
 const FORM_ENDPOINT = 'https://api.web3forms.com/submit';
+
+/* ---------- Google Ads conversion tracking ----------
+   Fill these in once the Ads account exists, then paste the Google tag
+   (gtag.js) into every page. Until both are done these calls are inert —
+   nothing breaks, nothing fires.
+
+   AW-XXXXXXXXX is the conversion ID; the part after the slash is the
+   conversion label, one per action so lead types stay separate in reporting. */
+const ADS_CONVERSIONS = {
+  estimate: '',   // e.g. 'AW-123456789/AbC-D_efGh12345'
+  booking:  '',
+};
+
+function trackConversion(kind, valueUsd) {
+  const id = ADS_CONVERSIONS[kind];
+  if (!id || typeof window.gtag !== 'function') return;
+  window.gtag('event', 'conversion', {
+    send_to: id,
+    value: valueUsd || 0,
+    currency: 'USD',
+  });
+}
 const BUSINESS_EMAIL = 'JunkvoyageMn@gmail.com';
 
 // Web3Forms rejects a request with no key, so treat "endpoint set but key
@@ -231,6 +253,8 @@ const FORM_READY = Boolean(
             body: payload
           });
           if (!res.ok) throw new Error('Request failed: ' + res.status);
+          // Only after the server confirms — a click is not a lead.
+          trackConversion(isBooking ? 'booking' : 'estimate');
           form.reset();
           if (fileInput) { fileInput.value = ''; renderFiles(); }
           say(isBooking
