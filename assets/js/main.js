@@ -40,6 +40,44 @@ function trackConversion(kind, valueUsd) {
     currency: 'USD',
   });
 }
+/* ---------- Meta (Facebook/Instagram) pixel ----------
+   Paste the pixel ID from Events Manager below and tracking starts working.
+   Left empty, every call here is inert — nothing breaks, nothing fires.
+
+   Meta's own instructions say put the base code in <head> on every page.
+   Loading it from here instead costs a little on first paint, but keeps it
+   in one file across 17 pages, which is the difference between one edit and
+   seventeen. Fine for lead tracking. It would matter more on a store, where
+   view-through attribution depends on firing before anything else. */
+const META_PIXEL_ID = '1631535571868074';   // Events Manager dataset "Junk Voyage"
+
+(function loadMetaPixel() {
+  if (!META_PIXEL_ID || window.fbq) return;
+  !function (f, b, e, v, n, t, s) {
+    if (f.fbq) return; n = f.fbq = function () {
+      n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+    };
+    if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+    n.queue = []; t = b.createElement(e); t.async = !0; t.src = v;
+    s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s);
+  }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+  window.fbq('init', META_PIXEL_ID);
+  window.fbq('track', 'PageView');
+})();
+
+function trackMeta(event, params) {
+  if (!META_PIXEL_ID || typeof window.fbq !== 'function') return;
+  window.fbq('track', event, params || {});
+}
+
+/* Phone taps are the single biggest conversion on mobile and are completely
+   invisible to Meta without this — someone taps call, books a $600 job, and
+   the ad that produced it looks like it did nothing. */
+document.addEventListener('click', function (e) {
+  const tel = e.target.closest && e.target.closest('a[href^="tel:"]');
+  if (tel) trackMeta('Contact', { content_name: 'phone_click' });
+});
+
 const BUSINESS_EMAIL = 'JunkvoyageMn@gmail.com';
 
 // Web3Forms rejects a request with no key, so treat "endpoint set but key
@@ -255,6 +293,7 @@ const FORM_READY = Boolean(
           if (!res.ok) throw new Error('Request failed: ' + res.status);
           // Only after the server confirms — a click is not a lead.
           trackConversion(isBooking ? 'booking' : 'estimate');
+          trackMeta(isBooking ? 'Schedule' : 'Lead');
           form.reset();
           if (fileInput) { fileInput.value = ''; renderFiles(); }
           say(isBooking
