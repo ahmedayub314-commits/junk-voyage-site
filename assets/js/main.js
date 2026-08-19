@@ -20,23 +20,43 @@ const FORM_ACCESS_KEY = 'a3f81615-6387-4099-ad99-27c9c4668053';
 const FORM_ENDPOINT = 'https://api.web3forms.com/submit';
 
 /* ---------- Google Ads conversion tracking ----------
-   Fill these in once the Ads account exists, then paste the Google tag
-   (gtag.js) into every page. Until both are done these calls are inert —
-   nothing breaks, nothing fires.
+   Account 908-016-9356. The Google tag is loaded from here rather than
+   pasted into 17 <head> blocks, same reasoning as the Meta pixel below:
+   one file to edit instead of seventeen.
 
-   AW-XXXXXXXXX is the conversion ID; the part after the slash is the
-   conversion label, one per action so lead types stay separate in reporting. */
+   AW-18391785515 is the account's conversion ID; the string after the slash
+   is the per-action label, so lead types stay separate in reporting. */
+const GOOGLE_ADS_ID = 'AW-18391785515';
+
 const ADS_CONVERSIONS = {
-  estimate: '',   // e.g. 'AW-123456789/AbC-D_efGh12345'
-  booking:  '',
+  estimate: 'AW-18391785515/xr3lCLLkj-QcEKvA8cFE',   // "Submit lead form"
+  booking:  'AW-18391785515/OKO9COKKj-QcEKvA8cFE',   // "Book appointment"
+  phone:    'AW-18391785515/YGJMCOWKj-QcEKvA8cFE',   // "Contact"
 };
+
+/* Conservative values, deliberately the minimum job rather than the average.
+   Without them Google optimises toward cheap conversions instead of valuable
+   ones; a booking is worth more than an enquiry, and the bidding should know. */
+const ADS_VALUES = { estimate: 120, booking: 220, phone: 120 };
+
+(function loadGoogleTag() {
+  if (!GOOGLE_ADS_ID || window.gtag) return;
+  const s = document.createElement('script');
+  s.async = true;
+  s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GOOGLE_ADS_ID;
+  document.head.appendChild(s);
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', GOOGLE_ADS_ID);
+})();
 
 function trackConversion(kind, valueUsd) {
   const id = ADS_CONVERSIONS[kind];
   if (!id || typeof window.gtag !== 'function') return;
   window.gtag('event', 'conversion', {
     send_to: id,
-    value: valueUsd || 0,
+    value: valueUsd || ADS_VALUES[kind] || 0,
     currency: 'USD',
   });
 }
@@ -75,7 +95,9 @@ function trackMeta(event, params) {
    the ad that produced it looks like it did nothing. */
 document.addEventListener('click', function (e) {
   const tel = e.target.closest && e.target.closest('a[href^="tel:"]');
-  if (tel) trackMeta('Contact', { content_name: 'phone_click' });
+  if (!tel) return;
+  trackMeta('Contact', { content_name: 'phone_click' });
+  trackConversion('phone');
 });
 
 const BUSINESS_EMAIL = 'JunkvoyageMn@gmail.com';
