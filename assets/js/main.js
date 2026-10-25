@@ -39,6 +39,14 @@ const ADS_CONVERSIONS = {
    ones; a booking is worth more than an enquiry, and the bidding should know. */
 const ADS_VALUES = { estimate: 120, booking: 220, phone: 120 };
 
+/* Call tracking via Google forwarding number. For a visitor who arrives from a
+   Google ad, gtag replaces the number shown on the page with a tracking number,
+   so real connected calls to it register as the "Call (612-465-9587)" conversion
+   in Google Ads. DISPLAYED_PHONE must match the number exactly as it appears in
+   the page text, or gtag can't find it to swap it. */
+const CALL_CONVERSION_ID = 'AW-18391785515/edUgCOabxqkdEKvA8cFE';
+const DISPLAYED_PHONE = '612-465-9587';
+
 (function loadGoogleTag() {
   if (!GOOGLE_ADS_ID || window.gtag) return;
   const s = document.createElement('script');
@@ -49,6 +57,9 @@ const ADS_VALUES = { estimate: 120, booking: 220, phone: 120 };
   window.gtag = function () { window.dataLayer.push(arguments); };
   window.gtag('js', new Date());
   window.gtag('config', GOOGLE_ADS_ID);
+  window.gtag('config', CALL_CONVERSION_ID, {
+    phone_conversion_number: DISPLAYED_PHONE,
+  });
 })();
 
 function trackConversion(kind, valueUsd) {
